@@ -2,35 +2,51 @@ import { useState } from 'react';
 import './App.scss';
 import Slider from './components/Slider';
 import ToolBoxItem from './components/ToolBoxItem';
+import {
+  RiContrastDrop2Line,
+  RiDropFill,
+  RiContrastLine,
+} from 'react-icons/ri';
+import { AiOutlineFire } from 'react-icons/ai';
+import { IoColorFilterOutline } from 'react-icons/io5';
+import { MdBlurOn } from 'react-icons/md';
+import { BiMoon, BiSun } from 'react-icons/bi';
 
 const DEFAULT_TOOLBOX = [
   {
     id: 1,
     name: 'brightness',
+    icon: <BiSun />,
   },
   {
     id: 2,
     name: 'contrast',
+    icon: <RiContrastLine />,
   },
   {
     id: 3,
     name: 'saturation',
+    icon: <RiContrastDrop2Line />,
   },
   {
     id: 4,
     name: 'grayscale',
+    icon: <RiDropFill />,
   },
   {
     id: 5,
     name: 'sepia',
+    icon: <AiOutlineFire />,
   },
   {
     id: 6,
     name: 'hue rotate',
+    icon: <IoColorFilterOutline />,
   },
   {
     id: 7,
     name: 'blur',
+    icon: <MdBlurOn />,
   },
 ];
 
@@ -43,8 +59,15 @@ function App() {
       <header className="header">
         <div className="container">
           <h1>LIGHTROOM</h1>
-          <button onClick={() => setDarkMode(!darkMode)}>
-            toggle dark mode
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="btn-switch-dark-mode"
+          >
+            {darkMode ? (
+              <BiSun className="icon" />
+            ) : (
+              <BiMoon className="icon" s />
+            )}
           </button>
         </div>
       </header>
@@ -56,16 +79,17 @@ function App() {
         </div>
       </main>
       <footer className="toolbox">
-        {/* <div className="toolbox-items"> */}
         <Slider className="toolbox-items" slidesData={toolboxOptions}>
           {toolboxOptions.map((option) => {
-            return <ToolBoxItem name={option.name} key={option.id} />;
+            return (
+              <ToolBoxItem
+                icon={option.icon}
+                name={option.name}
+                key={option.id}
+              />
+            );
           })}
         </Slider>
-        {/* {toolboxOptions.map((option) => {
-            return <ToolBoxItem name={option.name} key={option.id} />;
-          })} */}
-        {/* </div> */}
       </footer>
     </div>
   );
