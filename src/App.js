@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './App.scss';
 import Slider from './components/Slider';
 import ToolBoxItem from './components/ToolBoxItem';
@@ -6,6 +6,7 @@ import {
   RiContrastDrop2Line,
   RiDropFill,
   RiContrastLine,
+  RiArrowLeftSLine,
 } from 'react-icons/ri';
 import { AiOutlineFire } from 'react-icons/ai';
 import { IoColorFilterOutline } from 'react-icons/io5';
@@ -55,6 +56,17 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [toolboxOptions, setToolboxOptions] = useState(DEFAULT_TOOLBOX);
   const [selectedToolBoxOption, setSelectedToolBoxOption] = useState(null);
+  const [firstInit, setFirstInit] = useState(false);
+  const [isSliderInUse, setIsSliderInUse] = useState(false);
+  const lastPosition = useRef(0);
+
+  useEffect(() => {
+    setFirstInit(false);
+  });
+
+  useEffect(() => {
+    setFirstInit(true);
+  }, []);
 
   return (
     <div className={`app ${darkMode ? 'dark-mode' : ''}`}>
@@ -82,20 +94,41 @@ function App() {
       </main>
       <footer className="toolbox">
         {selectedToolBoxOption === null ? (
-          <Slider className="toolbox-items" animateOnInit={true}>
+          <Slider
+            className="toolbox-items"
+            animateOnInit={firstInit}
+            whenSliderInUse={() => setIsSliderInUse(true)}
+            whenSliderNotInUse={() => setIsSliderInUse(false)}
+          >
             {toolboxOptions.map((option) => {
               return (
                 <ToolBoxItem
                   icon={option.icon}
                   name={option.name}
                   key={option.id}
-                  // disable={true}
+                  handleClick={() =>
+                    isSliderInUse ? {} : setSelectedToolBoxOption(option)
+                  }
+                  lastPosition={lastPosition.current}
                 />
               );
             })}
           </Slider>
         ) : (
-          ''
+          <div className="toolbox-slider">
+            <button
+              className="toolbox-slider-back"
+              onClick={() => setSelectedToolBoxOption(null)}
+            >
+              <RiArrowLeftSLine />
+            </button>
+            <ToolBoxItem
+              name={selectedToolBoxOption.name}
+              icon={selectedToolBoxOption.icon}
+              noclick
+            />
+            <RangeSlider />
+          </div>
         )}
       </footer>
     </div>

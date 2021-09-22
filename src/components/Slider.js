@@ -5,7 +5,12 @@ const getPositionX = (event) => {
   return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
 };
 
-const Slider = ({ children, animateOnInit }) => {
+const Slider = ({
+  children,
+  animateOnInit,
+  whenSliderInUse,
+  whenSliderNotInUse,
+}) => {
   const sliderRef = useRef();
   const sliderContainerRef = useRef();
 
@@ -31,10 +36,12 @@ const Slider = ({ children, animateOnInit }) => {
     runAnimationOnInit();
     doesContentFit();
 
+    window.addEventListener('resize', touchEnd);
     window.addEventListener('resize', runAnimationOnInit);
     window.addEventListener('resize', doesContentFit);
 
     return () => {
+      window.removeEventListener('resize', touchEnd);
       window.removeEventListener('resize', runAnimationOnInit);
       window.removeEventListener('resize', doesContentFit);
     };
@@ -75,11 +82,14 @@ const Slider = ({ children, animateOnInit }) => {
   };
 
   const setSliderPosition = () => {
-    sliderRef.current.style.transform = `translateX(${currentTranslate.current}px)`;
+    if (sliderRef.current !== null) {
+      sliderRef.current.style.transform = `translateX(${currentTranslate.current}px)`;
+    }
   };
 
   function touchMove(event) {
     if (isDragging.current) {
+      whenSliderInUse();
       const currentPosition = getPositionX(event);
       currentTranslate.current =
         prevTranslate.current + currentPosition - startPos.current;
@@ -110,6 +120,9 @@ const Slider = ({ children, animateOnInit }) => {
       setSliderPosition();
     }
     sliderContainerRef.current.style.cursor = 'grab';
+    setTimeout(() => {
+      whenSliderNotInUse();
+    }, 100);
   }
 
   return (

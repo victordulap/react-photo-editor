@@ -105,7 +105,7 @@ $neutral-1000: #000000;
     width: 100%;
     overflow-x: hidden;
 
-    .toolbox-item {
+    &-item {
       flex: 1 1 100%;
       display: flex;
       flex-direction: column;
@@ -114,6 +114,7 @@ $neutral-1000: #000000;
       min-width: 10rem;
       background: transparent;
       cursor: inherit;
+      height: 100%;
 
       &:disabled {
         color: inherit;
@@ -135,6 +136,37 @@ $neutral-1000: #000000;
       &-name {
         font-size: 1.2rem;
         text-transform: capitalize;
+      }
+    }
+
+    &-slider {
+      display: flex;
+      height: 100%;
+      align-items: center;
+      padding: 0 1rem 0 0;
+
+      &-back {
+        height: 100%;
+        font-size: 4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        // padding: 0 0.5em;
+        background: transparent;
+      }
+
+      .toolbox-item {
+        min-width: 10rem;
+      }
+
+      &-back,
+      .toolbox-item {
+        flex: 1 1 auto;
+        margin-right: 1rem;
+      }
+
+      .range-slider {
+        flex: 1 1 100%;
       }
     }
   }
