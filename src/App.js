@@ -66,7 +66,7 @@ function App() {
             {darkMode ? (
               <BiSun className="icon" />
             ) : (
-              <BiMoon className="icon" s />
+              <BiMoon className="icon" />
             )}
           </button>
         </div>
@@ -79,7 +79,7 @@ function App() {
         </div>
       </main>
       <footer className="toolbox">
-        <Slider className="toolbox-items" slidesData={toolboxOptions}>
+        <Slider className="toolbox-items" animateOnInit={true}>
           {toolboxOptions.map((option) => {
             return (
               <ToolBoxItem

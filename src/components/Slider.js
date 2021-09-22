@@ -5,7 +5,7 @@ const getPositionX = (event) => {
   return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
 };
 
-const Slider = ({ slidesData, children }) => {
+const Slider = ({ children, animateOnInit }) => {
   const sliderRef = useRef();
   const sliderContainerRef = useRef();
 
@@ -23,11 +23,27 @@ const Slider = ({ slidesData, children }) => {
     };
   }, []);
 
-  useEffect(() => {
-    currentTranslate.current = 0;
-    prevTranslate.current = 0;
+  const runAnimationOnInit = () => {
+    currentTranslate.current = -(
+      sliderRef.current.scrollWidth - sliderContainerRef.current.clientWidth
+    );
+    prevTranslate.current = -(
+      sliderRef.current.scrollWidth - sliderContainerRef.current.clientWidth
+    );
     setSliderPosition();
-  }, [slidesData]);
+    setTimeout(() => {
+      currentTranslate.current = 0;
+      prevTranslate.current = 0;
+      setSliderPosition();
+    }, 400);
+  };
+
+  useEffect(() => {
+    if (animateOnInit) {
+      console.log('animation');
+      runAnimationOnInit();
+    }
+  }, []);
 
   function touchStart(event) {
     isDragging.current = true;
