@@ -1,6 +1,5 @@
 .slider-container {
   overflow: hidden;
-  cursor: grab;
   flex: 0 0 auto;
   max-width: 100%;
   height: 100%;
@@ -15,7 +14,6 @@
     transition: transform 0.3s ease-out;
 
     &.grabbing {
-      cursor: grabbing;
       // transform: scale(0.95);
     }
 

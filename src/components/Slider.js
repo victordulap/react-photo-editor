@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Slider.scss';
 
 const getPositionX = (event) => {
@@ -15,42 +15,58 @@ const Slider = ({ children, animateOnInit }) => {
   const prevTranslate = useRef(0);
   const animationId = useRef(null);
 
-  useEffect(() => {
-    window.addEventListener('resize', touchEnd);
+  const [contentFits, setContentFits] = useState(false);
 
-    return () => {
-      window.removeEventListener('resize', touchEnd);
-    };
-  }, []);
-
-  const runAnimationOnInit = () => {
-    currentTranslate.current = -(
-      sliderRef.current.scrollWidth - sliderContainerRef.current.clientWidth
-    );
-    prevTranslate.current = -(
-      sliderRef.current.scrollWidth - sliderContainerRef.current.clientWidth
-    );
-    setSliderPosition();
-    setTimeout(() => {
-      currentTranslate.current = 0;
-      prevTranslate.current = 0;
-      setSliderPosition();
-    }, 400);
+  const doesContentFit = () => {
+    if (
+      sliderRef.current.scrollWidth > sliderContainerRef.current.clientWidth
+    ) {
+      setContentFits(false);
+    } else {
+      setContentFits(true);
+    }
   };
 
   useEffect(() => {
+    runAnimationOnInit();
+    doesContentFit();
+
+    window.addEventListener('resize', runAnimationOnInit);
+    window.addEventListener('resize', doesContentFit);
+
+    return () => {
+      window.removeEventListener('resize', runAnimationOnInit);
+      window.removeEventListener('resize', doesContentFit);
+    };
+  }, [children]);
+
+  const runAnimationOnInit = () => {
     if (animateOnInit) {
-      console.log('animation');
-      runAnimationOnInit();
+      currentTranslate.current = -(
+        sliderRef.current.scrollWidth - sliderContainerRef.current.clientWidth
+      );
+      prevTranslate.current = -(
+        sliderRef.current.scrollWidth - sliderContainerRef.current.clientWidth
+      );
+      setSliderPosition();
+      setTimeout(() => {
+        currentTranslate.current = 0;
+        prevTranslate.current = 0;
+        setSliderPosition();
+      }, 400);
     }
-  }, []);
+  };
+
+  // useEffect(() => {
+  //   runAnimationOnInit();
+  // }, []);
 
   function touchStart(event) {
     isDragging.current = true;
     startPos.current = getPositionX(event);
 
     animationId.current = requestAnimationFrame(animation);
-    sliderRef.current.style.cursor = 'grabbing';
+    sliderContainerRef.current.style.cursor = 'grabbing';
   }
 
   const animation = () => {
@@ -93,23 +109,24 @@ const Slider = ({ children, animateOnInit }) => {
       );
       setSliderPosition();
     }
-    sliderRef.current.style.cursor = 'grab';
+    sliderContainerRef.current.style.cursor = 'grab';
   }
 
   return (
     <div
-      className="slider-container"
-      onTouchStart={touchStart}
-      onMouseDown={touchStart}
-      onTouchMove={touchMove}
-      onMouseMove={touchMove}
-      onTouchEnd={touchEnd}
-      onTouchCancel={touchEnd}
-      onMouseUp={touchEnd}
-      onMouseLeave={() => {
-        if (isDragging.current) touchEnd();
+      onTouchStart={(e) => (contentFits ? {} : touchStart(e))}
+      onMouseDown={(e) => (contentFits ? {} : touchStart(e))}
+      onTouchMove={(e) => (contentFits ? {} : touchMove(e))}
+      onMouseMove={(e) => (contentFits ? {} : touchMove(e))}
+      onTouchEnd={(e) => (contentFits ? {} : touchEnd(e))}
+      onTouchCancel={(e) => (contentFits ? {} : touchEnd(e))}
+      onMouseUp={(e) => (contentFits ? {} : touchEnd(e))}
+      onMouseLeave={(e) => {
+        if (isDragging.current) touchEnd(e);
       }}
       ref={sliderContainerRef}
+      className="slider-container"
+      style={contentFits ? {} : { cursor: 'grab' }}
     >
       <ul className={`slider`} ref={sliderRef}>
         {children}

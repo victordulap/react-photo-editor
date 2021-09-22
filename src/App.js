@@ -11,6 +11,7 @@ import { AiOutlineFire } from 'react-icons/ai';
 import { IoColorFilterOutline } from 'react-icons/io5';
 import { MdBlurOn } from 'react-icons/md';
 import { BiMoon, BiSun } from 'react-icons/bi';
+import RangeSlider from './components/RangeSlider';
 
 const DEFAULT_TOOLBOX = [
   {
@@ -53,6 +54,7 @@ const DEFAULT_TOOLBOX = [
 function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [toolboxOptions, setToolboxOptions] = useState(DEFAULT_TOOLBOX);
+  const [selectedToolBoxOption, setSelectedToolBoxOption] = useState(null);
 
   return (
     <div className={`app ${darkMode ? 'dark-mode' : ''}`}>
@@ -79,17 +81,22 @@ function App() {
         </div>
       </main>
       <footer className="toolbox">
-        <Slider className="toolbox-items" animateOnInit={true}>
-          {toolboxOptions.map((option) => {
-            return (
-              <ToolBoxItem
-                icon={option.icon}
-                name={option.name}
-                key={option.id}
-              />
-            );
-          })}
-        </Slider>
+        {selectedToolBoxOption === null ? (
+          <Slider className="toolbox-items" animateOnInit={true}>
+            {toolboxOptions.map((option) => {
+              return (
+                <ToolBoxItem
+                  icon={option.icon}
+                  name={option.name}
+                  key={option.id}
+                  // disable={true}
+                />
+              );
+            })}
+          </Slider>
+        ) : (
+          ''
+        )}
       </footer>
     </div>
   );
