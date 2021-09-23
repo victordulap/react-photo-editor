@@ -24,6 +24,7 @@ const DEFAULT_TOOLBOX = [
     value: 100,
     unit: '%',
     function: 'brightness',
+    makeBeautifulNumbers: true,
   },
   {
     id: 2,
@@ -34,6 +35,7 @@ const DEFAULT_TOOLBOX = [
     value: 100,
     unit: '%',
     function: 'contrast',
+    makeBeautifulNumbers: true,
   },
   {
     id: 3,
@@ -44,6 +46,7 @@ const DEFAULT_TOOLBOX = [
     value: 100,
     unit: '%',
     function: 'saturate',
+    makeBeautifulNumbers: true,
   },
   {
     id: 4,
@@ -194,6 +197,7 @@ function App() {
               max={selectedToolBoxOption.max}
               value={selectedToolBoxOption.value}
               handleChange={handleRangeSliderChange}
+              makeBeautifulNumbers={selectedToolBoxOption.makeBeautifulNumbers}
             />
           </div>
         )}
