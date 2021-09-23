@@ -23,6 +23,7 @@ const DEFAULT_TOOLBOX = [
     max: 200,
     value: 100,
     unit: '%',
+    function: 'brightness',
   },
   {
     id: 2,
@@ -32,6 +33,7 @@ const DEFAULT_TOOLBOX = [
     max: 200,
     value: 100,
     unit: '%',
+    function: 'contrast',
   },
   {
     id: 3,
@@ -41,42 +43,47 @@ const DEFAULT_TOOLBOX = [
     max: 200,
     value: 100,
     unit: '%',
+    function: 'saturate',
   },
   {
     id: 4,
     name: 'grayscale',
     icon: <RiDropFill />,
     min: 0,
-    max: 200,
-    value: 100,
+    max: 100,
+    value: 0,
     unit: '%',
+    function: 'grayscale',
   },
   {
     id: 5,
     name: 'sepia',
     icon: <AiOutlineFire />,
     min: 0,
-    max: 200,
-    value: 100,
+    max: 100,
+    value: 0,
     unit: '%',
+    function: 'sepia',
   },
   {
     id: 6,
     name: 'hue rotate',
     icon: <IoColorFilterOutline />,
     min: 0,
-    max: 200,
-    value: 100,
-    unit: '%',
+    max: 360,
+    value: 0,
+    unit: 'deg',
+    function: 'hue-rotate',
   },
   {
     id: 7,
     name: 'blur',
     icon: <MdBlurOn />,
     min: 0,
-    max: 200,
-    value: 100,
-    unit: '%',
+    max: 15,
+    value: 0,
+    unit: 'px',
+    function: 'blur',
   },
 ];
 
@@ -86,6 +93,7 @@ function App() {
   const [selectedToolBoxOption, setSelectedToolBoxOption] = useState(null);
   const [firstInit, setFirstInit] = useState(false);
   const [isSliderInUse, setIsSliderInUse] = useState(false);
+  const [filter, setFilter] = useState('none');
   const lastPosition = useRef(0);
 
   useEffect(() => {
@@ -95,6 +103,13 @@ function App() {
   useEffect(() => {
     setFirstInit(true);
   }, []);
+
+  useEffect(() => {
+    const allFilters = toolboxOptions
+      .map((option) => `${option.function}(${option.value}${option.unit})`)
+      .join(' ');
+    setFilter(allFilters);
+  }, [toolboxOptions]);
 
   const handleRangeSliderChange = ({ target }) => {
     setToolboxOptions((prevOptions) => {
@@ -129,7 +144,13 @@ function App() {
       <main className="editing-image">
         <div className="container">
           <div className="image-container">
-            <div className="image"></div>
+            <div
+              className="image"
+              style={{
+                filter: filter,
+                backgroundImage: `url(https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png)`,
+              }}
+            ></div>
           </div>
         </div>
       </main>

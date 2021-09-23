@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './RangeSlider.scss';
 
 const RangeSlider = ({ min, max, value, handleChange }) => {
+  const step = min + max < 100 && (min + max) / 100;
+
   return (
     <div className="range-slider">
       <p className="range-slider-number range-slider-min">{min}</p>
@@ -14,8 +16,11 @@ const RangeSlider = ({ min, max, value, handleChange }) => {
           max={max}
           value={value}
           onChange={handleChange}
+          step={step}
         />
-        <div className="range-slider-number range-slider-value">{value}</div>
+        <div className="range-slider-number range-slider-value">
+          {Math.round(value)}
+        </div>
       </div>
       <p className="range-slider-number range-slider-max">{max}</p>
     </div>
