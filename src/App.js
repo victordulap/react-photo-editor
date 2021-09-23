@@ -7,6 +7,7 @@ import {
   RiDropFill,
   RiContrastLine,
   RiArrowLeftSLine,
+  RiFileUploadLine,
 } from 'react-icons/ri';
 import { AiOutlineFire } from 'react-icons/ai';
 import { IoColorFilterOutline } from 'react-icons/io5';
@@ -97,7 +98,10 @@ function App() {
   const [firstInit, setFirstInit] = useState(false);
   const [isSliderInUse, setIsSliderInUse] = useState(false);
   const [filter, setFilter] = useState('none');
-  const lastPosition = useRef(0);
+  const [image, setImage] = useState(
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png'
+  );
+  const imageInputRef = useRef('image-input');
 
   useEffect(() => {
     setFirstInit(false);
@@ -114,6 +118,11 @@ function App() {
     setFilter(allFilters);
   }, [toolboxOptions]);
 
+  const resetFilters = () => {
+    setToolboxOptions(DEFAULT_TOOLBOX);
+    setSelectedToolBoxOption(null);
+  };
+
   const handleRangeSliderChange = ({ target }) => {
     setToolboxOptions((prevOptions) => {
       setSelectedToolBoxOption((oldOption) => {
@@ -127,21 +136,54 @@ function App() {
     });
   };
 
+  const handleFileUpload = (e) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        resetFilters();
+        setImage(reader.result);
+      }
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
+  };
+
   return (
     <div className={`app ${darkMode ? 'dark-mode' : ''}`}>
       <header className="header">
         <div className="container">
           <h1>LIGHTROOM</h1>
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="btn-switch-dark-mode"
+
+          <div
+            className="group-btns"
+            style={{ height: '100%', display: 'flex', gap: '1rem' }}
           >
-            {darkMode ? (
-              <BiSun className="icon" />
-            ) : (
-              <BiMoon className="icon" />
-            )}
-          </button>
+            <input
+              type="file"
+              name="image-upload"
+              id="image-upload"
+              style={{ display: 'none' }}
+              ref={imageInputRef}
+              accept="image/*"
+              onChange={handleFileUpload}
+            />
+            <button
+              onClick={() => imageInputRef.current.click()}
+              className="btn-header"
+            >
+              <RiFileUploadLine className="icon" />
+            </button>
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="btn-header"
+            >
+              {darkMode ? (
+                <BiSun className="icon" />
+              ) : (
+                <BiMoon className="icon" />
+              )}
+            </button>
+          </div>
         </div>
       </header>
       <main className="editing-image">
@@ -151,7 +193,7 @@ function App() {
               className="image"
               style={{
                 filter: filter,
-                backgroundImage: `url(https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png)`,
+                backgroundImage: `url(${image})`,
               }}
             ></div>
           </div>
@@ -174,7 +216,6 @@ function App() {
                   handleClick={() =>
                     isSliderInUse ? {} : setSelectedToolBoxOption(option)
                   }
-                  lastPosition={lastPosition.current}
                 />
               );
             })}
