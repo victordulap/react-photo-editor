@@ -110,6 +110,23 @@ function App() {
 
   useEffect(() => {
     setFirstInit(true);
+
+    // Add listener to update styles
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', (e) => setDarkMode(e.matches ? true : false));
+
+    // Setup dark/light mode for the first time
+    setDarkMode(
+      window.matchMedia('(prefers-color-scheme: dark)').matches ? true : false
+    );
+
+    // Remove listener
+    return () => {
+      window
+        .matchMedia('(prefers-color-scheme: dark)')
+        .removeEventListener('change', () => {});
+    };
   }, []);
 
   useEffect(() => {
