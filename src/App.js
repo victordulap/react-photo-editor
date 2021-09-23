@@ -155,8 +155,10 @@ function App() {
   };
 
   const handleFileUpload = (e) => {
-    if (e.target.files.length > 0)
+    if (e.target.files.length > 0) {
+      resetFilters();
       setImage(URL.createObjectURL(e.target.files[0]));
+    }
   };
 
   const handleImageClicked = () => {
