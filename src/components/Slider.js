@@ -122,7 +122,7 @@ const Slider = ({
     sliderContainerRef.current.style.cursor = 'grab';
     setTimeout(() => {
       whenSliderNotInUse();
-    }, 100);
+    }, 50);
   }
 
   return (

@@ -111,7 +111,7 @@ $neutral-1000: #000000;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-width: 10rem;
+      min-width: 8rem;
       background: transparent;
       cursor: inherit;
       height: 100%;
@@ -153,16 +153,17 @@ $neutral-1000: #000000;
         justify-content: center;
         // padding: 0 0.5em;
         background: transparent;
+        margin-right: 0.8rem;
       }
 
       .toolbox-item {
-        min-width: 10rem;
+        min-width: 6.5rem;
+        margin-right: 1.2rem;
       }
 
       &-back,
       .toolbox-item {
         flex: 1 1 auto;
-        margin-right: 1rem;
       }
 
       .range-slider {

@@ -19,36 +19,64 @@ const DEFAULT_TOOLBOX = [
     id: 1,
     name: 'brightness',
     icon: <BiSun />,
+    min: 0,
+    max: 200,
+    value: 100,
+    unit: '%',
   },
   {
     id: 2,
     name: 'contrast',
     icon: <RiContrastLine />,
+    min: 0,
+    max: 200,
+    value: 100,
+    unit: '%',
   },
   {
     id: 3,
     name: 'saturation',
     icon: <RiContrastDrop2Line />,
+    min: 0,
+    max: 200,
+    value: 100,
+    unit: '%',
   },
   {
     id: 4,
     name: 'grayscale',
     icon: <RiDropFill />,
+    min: 0,
+    max: 200,
+    value: 100,
+    unit: '%',
   },
   {
     id: 5,
     name: 'sepia',
     icon: <AiOutlineFire />,
+    min: 0,
+    max: 200,
+    value: 100,
+    unit: '%',
   },
   {
     id: 6,
     name: 'hue rotate',
     icon: <IoColorFilterOutline />,
+    min: 0,
+    max: 200,
+    value: 100,
+    unit: '%',
   },
   {
     id: 7,
     name: 'blur',
     icon: <MdBlurOn />,
+    min: 0,
+    max: 200,
+    value: 100,
+    unit: '%',
   },
 ];
 
@@ -67,6 +95,19 @@ function App() {
   useEffect(() => {
     setFirstInit(true);
   }, []);
+
+  const handleRangeSliderChange = ({ target }) => {
+    setToolboxOptions((prevOptions) => {
+      setSelectedToolBoxOption((oldOption) => {
+        return { ...oldOption, value: target.value };
+      });
+
+      return prevOptions.map((option) => {
+        if (option.id !== selectedToolBoxOption.id) return option;
+        return { ...option, value: target.value };
+      });
+    });
+  };
 
   return (
     <div className={`app ${darkMode ? 'dark-mode' : ''}`}>
@@ -127,7 +168,12 @@ function App() {
               icon={selectedToolBoxOption.icon}
               noclick
             />
-            <RangeSlider />
+            <RangeSlider
+              min={selectedToolBoxOption.min}
+              max={selectedToolBoxOption.max}
+              value={selectedToolBoxOption.value}
+              handleChange={handleRangeSliderChange}
+            />
           </div>
         )}
       </footer>
