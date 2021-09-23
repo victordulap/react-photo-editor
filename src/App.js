@@ -137,22 +137,14 @@ function App() {
   };
 
   const handleFileUpload = (e) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        resetFilters();
-        setImage(reader.result);
-      }
-    };
-
-    reader.readAsDataURL(e.target.files[0]);
+    setImage(URL.createObjectURL(e.target.files[0]));
   };
 
   return (
     <div className={`app ${darkMode ? 'dark-mode' : ''}`}>
       <header className="header">
         <div className="container">
-          <h1>LIGHTROOM</h1>
+          <h1>VD LIGHT</h1>
 
           <div
             className="group-btns"
@@ -186,7 +178,14 @@ function App() {
           </div>
         </div>
       </header>
-      <main className="editing-image">
+      <main
+        className="editing-image"
+        onContextMenu={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        }}
+      >
         <div className="container">
           <div className="image-container">
             <div
