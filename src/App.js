@@ -101,6 +101,7 @@ function App() {
   const [image, setImage] = useState(
     'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png'
   );
+  const [isImageClicked, setIsImageClicked] = useState(false);
   const imageInputRef = useRef('image-input');
 
   useEffect(() => {
@@ -137,7 +138,16 @@ function App() {
   };
 
   const handleFileUpload = (e) => {
-    setImage(URL.createObjectURL(e.target.files[0]));
+    if (e.target.files.length > 0)
+      setImage(URL.createObjectURL(e.target.files[0]));
+  };
+
+  const handleImageClicked = () => {
+    setIsImageClicked(true);
+  };
+
+  const handleImageNotClicked = () => {
+    setIsImageClicked(false);
   };
 
   return (
@@ -189,11 +199,15 @@ function App() {
         <div className="container">
           <div className="image-container">
             <div
-              className="image"
+              className={`image ${isImageClicked ? 'image-clicked' : ''}`}
               style={{
                 filter: filter,
                 backgroundImage: `url(${image})`,
               }}
+              onMouseDown={handleImageClicked}
+              onTouchStart={handleImageClicked}
+              onMouseUp={handleImageNotClicked}
+              onTouchEnd={handleImageNotClicked}
             ></div>
           </div>
         </div>
