@@ -57,6 +57,15 @@ $neutral-1000: #000000;
       .image-container {
         background-color: $neutral-800;
       }
+
+      .image {
+        &:active {
+          &::before {
+            background-color: $neutral-900;
+            color: $neutral-200;
+          }
+        }
+      }
     }
 
     .toolbox {
@@ -84,6 +93,10 @@ $neutral-1000: #000000;
     grid-area: header;
     padding: 2rem 0;
     // height: 8.4rem;
+
+    @media screen and (max-width: 500px) {
+      font-size: 3rem;
+    }
 
     .container {
       height: 100%;
@@ -147,14 +160,15 @@ $neutral-1000: #000000;
         &::before {
           content: 'Before';
           position: absolute;
-          background-color: inherit;
-          color: inherit;
+          background-color: $neutral-200;
+          color: $neutral-900;
           top: 0;
           left: 0;
           font-size: 2rem;
           font-weight: 700;
           padding: 0.5em;
           margin: 0.5em;
+          opacity: 0.75;
         }
       }
     }
@@ -220,11 +234,20 @@ $neutral-1000: #000000;
         background: transparent;
         margin-right: 0.8rem;
         color: inherit;
+
+        @media screen and (max-width: 400px) {
+          font-size: 3rem;
+          margin-right: 1rem;
+        }
       }
 
       .toolbox-item {
         min-width: 6.5rem;
         margin-right: 1.2rem;
+        @media screen and (max-width: 400px) {
+          min-width: 4rem;
+          margin-right: 0.8rem;
+        }
       }
 
       &-back,
